@@ -1,0 +1,10 @@
+# machine-local config (rig init writes it)
+fae.toml
+# cells, their lock plane, and the two-stage delete's holding area
+workspaces.nosync/
+ws-test.nosync/
+.to_be_deleted/
+tmp/
+__pycache__/
+*.pyc
+.DS_Store
