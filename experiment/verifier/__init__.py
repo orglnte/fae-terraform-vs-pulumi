@@ -20,7 +20,7 @@ import urllib.request
 from pathlib import Path
 
 from fae.cell import experiment as _experiment
-from fae.cell.substrate import sandbox
+from fae.cell.substrate import secrunner
 from fae.cell.variants.base import HookFailure
 from fae.cell.verify import Verdict, Verifier
 
@@ -254,7 +254,7 @@ class StackVerifier(Verifier):
         out = Path(ctx.out)
         variant = _experiment.current().variant(ctx.variant)
         arrangement = ctx.arrangement or "prod"
-        workdir = sandbox.fresh_copy(Path(ctx.artifacts), out) / "infra"
+        workdir = secrunner.fresh_copy(Path(ctx.artifacts), out) / "infra"
         logf = (out / "verify.log").open("w")
 
         def log(line):
