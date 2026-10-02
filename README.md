@@ -44,9 +44,9 @@ set `FAE_DIR`).
 ```sh
 docker pull docker:27-dind && docker pull postgres:16-alpine \
   && docker pull redis:7-alpine && docker pull nginx:1.30.5-alpine
-python3 cli.py rig init                # writes fae.toml, the machine-local config
-python3 cli.py rig substrate           # builds the app and each tool's image
-python3 cli.py rig smoke --full-gate   # each tool's reference solution, both scenarios
+python3 cli.py experiment init                # writes fae.toml, the machine-local config
+python3 cli.py experiment substrate           # builds the app and each tool's image
+python3 cli.py experiment smoke --full-gate   # each tool's reference solution, both scenarios
 ```
 
 ```

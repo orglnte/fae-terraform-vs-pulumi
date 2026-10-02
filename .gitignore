@@ -1,4 +1,4 @@
-# machine-local config (rig init writes it)
+# machine-local config (experiment init writes it)
 fae.toml
 # cells, their lock plane, and the two-stage delete's holding area
 workspaces.nosync/

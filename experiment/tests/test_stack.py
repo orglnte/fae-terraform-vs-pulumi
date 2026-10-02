@@ -1,6 +1,6 @@
 """The definition, the pins every doc and image must agree on, and the
 verifier's judgments, without a daemon. The stack end to end is
-`python3 cli.py rig smoke --full-gate`."""
+`python3 cli.py experiment smoke --full-gate`."""
 import re
 import tempfile
 import unittest
