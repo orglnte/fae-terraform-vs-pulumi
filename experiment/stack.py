@@ -10,8 +10,8 @@ from pathlib import Path
 
 from fae.cell import image as _image
 from fae.cell.infra.dind import DindSidecar
-from fae.cell.variants import base
-from fae.cell.variants.base import Variant, cksum
+from fae.cell.infra import base
+from fae.cell.infra.base import Infra, cksum
 
 HERE = Path(__file__).resolve().parent
 APP_DIR = HERE / "app"
@@ -220,15 +220,15 @@ RUNNERS = {"terraform": Terraform, "pulumi": Pulumi}
 
 # --- the infra both variants share: the cell's daemon -------------------------
 
-class Stack(Variant):
+class Stack(Infra):
     """The cell's docker-in-docker daemon, alive for the cell; each scenario
     starts it empty and ends it emptied."""
-    INFRA_PREFIXES = {"container": DindSidecar.PREFIX}
+    PREFIXES = {"container": DindSidecar.PREFIX}
     # host loopback ports of the sidecar's API and its load balancer, per cell
     API_BASE = 27000
 
     @classmethod
-    def infra_identities(cls, cid):
+    def identities(cls, cid):
         return [("container", DindSidecar.name_for(cid))]
 
     def ports(self):
@@ -238,9 +238,9 @@ class Stack(Variant):
     def sidecar(self):
         api, lb = self.ports()
         return StackSidecar(self.cid, api, lb, LB_PORT, DIND_IMAGE, "",
-                            self.log, self.ID, network=self.network())
+                            self.log, self.variant.ID, network=self.network())
 
-    def infra_ok(self):
+    def ok(self):
         if not base._ok(["docker", "info"]):
             self.log("HALT[infra]: docker unreachable")
             return False
@@ -255,14 +255,14 @@ class Stack(Variant):
             return False
         return True
 
-    def infra_alive(self):
+    def alive(self):
         return self.sidecar().answers()
 
-    def author_setup(self):
+    def cell_setup(self):
         self.sidecar().ensure()
         return {}
 
-    def author_teardown(self):
+    def cell_teardown(self):
         self.sidecar().remove()
 
     def verify_setup(self, ctx, env):

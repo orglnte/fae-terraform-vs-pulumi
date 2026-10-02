@@ -41,7 +41,7 @@ class TestTheDefinition(unittest.TestCase):
     def test_one_infra_class_and_a_runner_per_tool(self):
         from fae.cell.variants import files
         for v, runner in ((Terraform, stack.Terraform), (Pulumi, stack.Pulumi)):
-            self.assertTrue(issubclass(v, stack.Stack))
+            self.assertIs(v.INFRA, stack.Stack)
             self.assertIs(stack.RUNNERS[v.FACTORS["tool"]], runner)
             self.assertEqual(files.problems(v), [])
             self.assertEqual(v.INPUTS["docs/" + v.FACTORS["tool"] + ".md"].name,
