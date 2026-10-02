@@ -1,0 +1,19 @@
+label = "Terraform"
+factors = { tool = "terraform" }
+
+[authoring]
+template = ["task/skeleton", "variants/terraform/seed/overlay"]
+surface = { prefixes = ["infra/"] }
+tools = "variants/terraform/agent"
+
+[authoring.inputs]
+"TODO.md" = "task/T1.PROMPT.md"
+"docs/project.md" = "variants/terraform/seed/T1.terraform.project_layout.md"
+"docs/terraform.md" = "variants/terraform/seed/any.terraform.api.md"
+
+[verify]
+image_dir = "variants/terraform/verify"
+reference = "variants/terraform/seed/reference/overlay"
+
+[infra]
+class = "stack:Stack"

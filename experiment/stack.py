@@ -1,6 +1,7 @@
 """What both variants share: the Docker daemon each cell deploys to (a
 docker-in-docker container of its own), the images preloaded into it, and one
-runner per tool that applies, re-plans and destroys the agent's stack."""
+runner per tool that applies, re-plans and destroys the agent's stack; `Stack`
+is the infra class both variant files name."""
 from __future__ import annotations
 
 import os
@@ -10,6 +11,7 @@ from pathlib import Path
 from fae.cell import image as _image
 from fae.cell.infra.dind import DindSidecar
 from fae.cell.variants import base
+from fae.cell.variants.base import Variant, cksum
 
 HERE = Path(__file__).resolve().parent
 APP_DIR = HERE / "app"
@@ -117,7 +119,7 @@ class StackSidecar(DindSidecar):
         load_images(self.api, self.log)
 
 
-# --- the tools: one runner per arm, same verbs --------------------------------
+# --- the tools: one runner per tool, same verbs -------------------------------
 
 class Runner:
     """Drives one tool over the authored project in `workdir` against the
@@ -211,3 +213,60 @@ class Pulumi(Runner):
         ok, tail, _ = self.run(["pulumi", "destroy", "--yes", "--skip-preview",
                                 "--non-interactive", "--color", "never"])
         return ok, tail
+
+
+RUNNERS = {"terraform": Terraform, "pulumi": Pulumi}
+
+
+# --- the infra both variants share: the cell's daemon -------------------------
+
+class Stack(Variant):
+    """The cell's docker-in-docker daemon, alive for the cell; each scenario
+    starts it empty and ends it emptied."""
+    INFRA_PREFIXES = {"container": DindSidecar.PREFIX}
+    # host loopback ports of the sidecar's API and its load balancer, per cell
+    API_BASE = 27000
+
+    @classmethod
+    def infra_identities(cls, cid):
+        return [("container", DindSidecar.name_for(cid))]
+
+    def ports(self):
+        api = self.API_BASE + 2 * (cksum(self.cid) % 800)
+        return api, api + 1
+
+    def sidecar(self):
+        api, lb = self.ports()
+        return StackSidecar(self.cid, api, lb, LB_PORT, DIND_IMAGE, "",
+                            self.log, self.ID, network=self.network())
+
+    def infra_ok(self):
+        if not base._ok(["docker", "info"]):
+            self.log("HALT[infra]: docker unreachable")
+            return False
+        for img in (DIND_IMAGE, *REGISTRY_IMAGES):
+            if not base._ok(["docker", "image", "inspect", img]):
+                self.log(f"HALT[infra]: image {img} not present — docker pull {img}")
+                return False
+        try:
+            _image.ensure("iac-app", APP_DIR, log=self.log)
+        except RuntimeError as e:
+            self.log(f"HALT[infra]: {e}")
+            return False
+        return True
+
+    def infra_alive(self):
+        return self.sidecar().answers()
+
+    def author_setup(self):
+        self.sidecar().ensure()
+        return {}
+
+    def author_teardown(self):
+        self.sidecar().remove()
+
+    def verify_setup(self, ctx, env):
+        return {"DOCKER_HOST": fresh_daemon(ctx.cid, self.log)}
+
+    def verify_teardown(self, ctx, env):
+        clean(daemon_url(ctx.cid), self.log)

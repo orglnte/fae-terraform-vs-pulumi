@@ -12,10 +12,10 @@ from _ctx import _ROOT as ROOT
 from fae.cell import experiment as _experiment
 
 from experiment import stack
-from experiment.variants import Pulumi, Terraform
 from experiment.verifier import Check, Failed, World
 
 EXP = ROOT / "experiment"
+Terraform, Pulumi = (_experiment.current().variant(v) for v in ("terraform", "pulumi"))
 
 
 def arg(dockerfile, name):
@@ -25,7 +25,7 @@ def arg(dockerfile, name):
 class TestTheDefinition(unittest.TestCase):
     def test_two_variants_two_scenarios(self):
         d = _experiment.current()
-        self.assertEqual(d.arms, ("terraform", "pulumi"))
+        self.assertEqual(d.ids, ("pulumi", "terraform"))
         self.assertEqual(d.gate.arrangements, ("prod", "dev"))
 
     def test_each_variant_has_its_own_verify_and_agent_image(self):
@@ -37,6 +37,15 @@ class TestTheDefinition(unittest.TestCase):
     def test_the_agent_writes_infra_only(self):
         for v in (Terraform, Pulumi):
             self.assertEqual(v.AUTHORING_SURFACE, ((), ("infra/",)))
+
+    def test_one_infra_class_and_a_runner_per_tool(self):
+        from fae.cell.variants import files
+        for v, runner in ((Terraform, stack.Terraform), (Pulumi, stack.Pulumi)):
+            self.assertTrue(issubclass(v, stack.Stack))
+            self.assertIs(stack.RUNNERS[v.FACTORS["tool"]], runner)
+            self.assertEqual(files.problems(v), [])
+            self.assertEqual(v.INPUTS["docs/" + v.FACTORS["tool"] + ".md"].name,
+                             f"any.{v.FACTORS['tool']}.api.md")
 
 
 class TestThePinsAgree(unittest.TestCase):

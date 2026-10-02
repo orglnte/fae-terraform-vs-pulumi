@@ -1,0 +1,19 @@
+label = "Pulumi"
+factors = { tool = "pulumi" }
+
+[authoring]
+template = ["task/skeleton", "variants/pulumi/seed/overlay"]
+surface = { prefixes = ["infra/"] }
+tools = "variants/pulumi/agent"
+
+[authoring.inputs]
+"TODO.md" = "task/T1.PROMPT.md"
+"docs/project.md" = "variants/pulumi/seed/T1.pulumi.project_layout.md"
+"docs/pulumi.md" = "variants/pulumi/seed/any.pulumi.api.md"
+
+[verify]
+image_dir = "variants/pulumi/verify"
+reference = "variants/pulumi/seed/reference/overlay"
+
+[infra]
+class = "stack:Stack"

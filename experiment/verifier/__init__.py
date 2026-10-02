@@ -281,7 +281,7 @@ class StackVerifier(Verifier):
             return verdict(False, "infra", str(e), charge=False)
         if not workdir.is_dir():
             return verdict(False, "layout", "no infra/ directory in the workspace")
-        check = Check(variant.RUNNER(workdir, host, out / "tool.log"), World(host),
+        check = Check(stack.RUNNERS[variant.FACTORS["tool"]](workdir, host, out / "tool.log"), World(host),
                       Http(stack.lb_host(ctx.cid), stack.LB_PORT), Path(ctx.artifacts) / "infra", log)
         log(f"arrangement {arrangement}, {variant.LABEL}, daemon {host}")
         try:

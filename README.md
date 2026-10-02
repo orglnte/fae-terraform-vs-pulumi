@@ -53,13 +53,13 @@ python3 cli.py experiment smoke --full-gate   # each tool's reference solution, 
 === SMOKE SUMMARY ===
   ok   terraform      GREEN at attempt 1
   ok   pulumi         GREEN at attempt 1
-  PIPELINE OK on every arm.
+  PIPELINE OK on every variant.
 ```
 
 One real agent, once its CLI is logged in (see the FAE README):
 
 ```sh
-python3 cli.py cell spawn sonnet terraform apidocs --rep 1
+python3 cli.py cell spawn sonnet terraform --rep 1
 python3 cli.py fleet-status
 ```
 
@@ -77,12 +77,14 @@ python3 cli.py results score
 ```
 experiment/
 ├── __init__.py            the definition: two variants, two scenarios, the verifier
-├── stack.py               the cell's Docker daemon, the images in it, one runner per tool
+├── stack.py               the cell's Docker daemon (`Stack`, the infra class), the images in it, one runner per tool
 ├── app/                   the service the stack deploys
 ├── task/
 │   ├── T1.PROMPT.md       the brief (it becomes TODO.md)
 │   └── skeleton/README.md the stack's requirements, the same for both tools
 ├── variants/
+│   ├── terraform.toml     a variant: what the agent gets, how it is judged, its infra
+│   ├── pulumi.toml
 │   ├── terraform/
 │   │   ├── seed/          the stub main.tf, the tool doc, the reference solution
 │   │   ├── verify/        the verifier's Terraform layer: CLI and providers, offline
