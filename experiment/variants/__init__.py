@@ -14,7 +14,7 @@ from .. import stack
 
 class StackVariant(Variant):
     CONDITIONS = ("apidocs",)
-    AUTHORABLE = ((), ("infra/",))
+    AUTHORING_SURFACE = ((), ("infra/",))
     SUBSTRATE_PREFIXES = {"container": stack.DindSidecar.PREFIX}
     RUNNER = None
     # host loopback ports of the sidecar's API and its load balancer, per cell

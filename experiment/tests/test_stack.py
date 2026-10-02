@@ -36,7 +36,7 @@ class TestTheDefinition(unittest.TestCase):
 
     def test_the_agent_writes_infra_only(self):
         for v in (Terraform, Pulumi):
-            self.assertEqual(v.AUTHORABLE, ((), ("infra/",)))
+            self.assertEqual(v.AUTHORING_SURFACE, ((), ("infra/",)))
 
 
 class TestThePinsAgree(unittest.TestCase):
