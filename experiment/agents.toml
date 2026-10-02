@@ -1,0 +1,15 @@
+# The agents this experiment compares. The tag names every cell id
+# (<tag>_<effort>_<variant>_<task>_r<n>). Each agent's credentials home is
+# machine-local: fae.toml [agents.<tag>] home, else .agent-home/.<cli>.
+
+[agents.haiku]
+cli = "claude"
+model = "claude-haiku-4-5-20251001"
+
+[agents.sonnet]
+cli = "claude"
+model = "claude-sonnet-5"
+
+[agents.opus]
+cli = "claude"
+model = "claude-opus-5"
