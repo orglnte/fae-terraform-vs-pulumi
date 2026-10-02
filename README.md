@@ -63,12 +63,12 @@ python3 cli.py cell spawn sonnet terraform --rep 1
 python3 cli.py fleet-status
 ```
 
-The comparison: five cells per tool for each model, then the table.
+The comparison: five cells per tool for each agent, then the table.
 
 ```sh
 python3 cli.py conduct queue-add sonnet --matrix --reps 5
 python3 cli.py conduct queue-add haiku --matrix --reps 5
-python3 cli.py conduct run -n 2 --per-model 1      # foreground; Ctrl-C detaches, cells keep running
+python3 cli.py conduct run -n 2 --per-agent 1      # foreground; Ctrl-C detaches, cells keep running
 python3 cli.py results score
 ```
 
