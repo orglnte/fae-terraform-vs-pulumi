@@ -8,7 +8,7 @@ import subprocess
 from pathlib import Path
 
 from fae.cell import image as _image
-from fae.cell.substrate.dind import DindSidecar
+from fae.cell.infra.dind import DindSidecar
 from fae.cell.variants import base
 
 HERE = Path(__file__).resolve().parent
@@ -57,10 +57,10 @@ def load_images(host, log):
         save.stdout.close()
         save.wait()
         if save.returncode or load.returncode:
-            raise base.HookFailure(f"HALT[substrate]: loading {missing} into {host} failed")
+            raise base.HookFailure(f"HALT[infra]: loading {missing} into {host} failed")
         log(f"loaded into the cell daemon: {' '.join(missing)}")
     if docker(host, "tag", app_image(), APP_TAG).returncode:
-        raise base.HookFailure(f"HALT[substrate]: tagging {APP_TAG} in {host} failed")
+        raise base.HookFailure(f"HALT[infra]: tagging {APP_TAG} in {host} failed")
 
 
 def residue(host):
@@ -104,7 +104,7 @@ def fresh_daemon(cid, log):
     arrangement starts from. Returns its URL."""
     host = daemon_url(cid)
     if not base.daemon_answers(["docker", "-H", host, "version"]):
-        raise base.HookFailure(f"HALT[substrate]: the cell daemon {host} does not answer")
+        raise base.HookFailure(f"HALT[infra]: the cell daemon {host} does not answer")
     clean(host, log)
     load_images(host, log)
     return host

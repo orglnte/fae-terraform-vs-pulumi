@@ -15,13 +15,13 @@ from .. import stack
 class StackVariant(Variant):
     CONDITIONS = ("apidocs",)
     AUTHORING_SURFACE = ((), ("infra/",))
-    SUBSTRATE_PREFIXES = {"container": stack.DindSidecar.PREFIX}
+    INFRA_PREFIXES = {"container": stack.DindSidecar.PREFIX}
     RUNNER = None
     # host loopback ports of the sidecar's API and its load balancer, per cell
     API_BASE = 27000
 
     @classmethod
-    def substrate_identities(cls, cid):
+    def infra_identities(cls, cid):
         return [("container", stack.DindSidecar.name_for(cid))]
 
     def ports(self):
@@ -33,22 +33,22 @@ class StackVariant(Variant):
         return stack.StackSidecar(self.cid, api, lb, stack.LB_PORT, stack.DIND_IMAGE, "",
                                   self.log, self.TECH, network=self.network())
 
-    def substrate_ok(self):
+    def infra_ok(self):
         if not base._ok(["docker", "info"]):
-            self.log("HALT[substrate]: docker unreachable")
+            self.log("HALT[infra]: docker unreachable")
             return False
         for img in (stack.DIND_IMAGE, *stack.REGISTRY_IMAGES):
             if not base._ok(["docker", "image", "inspect", img]):
-                self.log(f"HALT[substrate]: image {img} not present — docker pull {img}")
+                self.log(f"HALT[infra]: image {img} not present — docker pull {img}")
                 return False
         try:
             _image.ensure("iac-app", stack.APP_DIR, log=self.log)
         except RuntimeError as e:
-            self.log(f"HALT[substrate]: {e}")
+            self.log(f"HALT[infra]: {e}")
             return False
         return True
 
-    def substrate_alive(self):
+    def infra_alive(self):
         return self.sidecar().answers()
 
     def author_setup(self):

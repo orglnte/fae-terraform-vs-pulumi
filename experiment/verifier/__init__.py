@@ -20,7 +20,7 @@ import urllib.request
 from pathlib import Path
 
 from fae.cell import experiment as _experiment
-from fae.cell.substrate import secrunner
+from fae.cell.infra import secrunner
 from fae.cell.variants.base import HookFailure
 from fae.cell.verify import Verdict, Verifier
 
@@ -247,7 +247,7 @@ class Check:
 class StackVerifier(Verifier):
     IMAGE_DIR = HERE
     FILES = ("verify.log", "tool.log")
-    SUBSTRATE_PREFIXES = {"container": stack.DindSidecar.PREFIX}
+    INFRA_PREFIXES = {"container": stack.DindSidecar.PREFIX}
 
     def verify(self, ctx):
         t0 = time.time()
@@ -278,7 +278,7 @@ class StackVerifier(Verifier):
         try:
             host = stack.fresh_daemon(ctx.cid, log)
         except HookFailure as e:
-            return verdict(False, "substrate", str(e), charge=False)
+            return verdict(False, "infra", str(e), charge=False)
         if not workdir.is_dir():
             return verdict(False, "layout", "no infra/ directory in the workspace")
         check = Check(variant.RUNNER(workdir, host, out / "tool.log"), World(host),
