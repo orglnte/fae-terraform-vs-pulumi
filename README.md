@@ -60,15 +60,15 @@ One real agent, once its CLI is logged in (see the FAE README):
 
 ```sh
 python3 cli.py cell spawn sonnet terraform --rep 1
-python3 cli.py fleet-status
+python3 cli.py experiment status
 ```
 
 The comparison: five cells per tool for each agent, then the table.
 
 ```sh
-python3 cli.py conduct queue-add sonnet --matrix --reps 5
-python3 cli.py conduct queue-add haiku --matrix --reps 5
-python3 cli.py conduct run -n 2 --per-agent 1      # foreground; Ctrl-C detaches, cells keep running
+python3 cli.py queue add sonnet --matrix --reps 5
+python3 cli.py queue add haiku --matrix --reps 5
+python3 cli.py experiment run -n 2 --per-agent 1      # foreground; Ctrl-C detaches, cells keep running
 python3 cli.py results score
 ```
 
