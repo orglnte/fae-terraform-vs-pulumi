@@ -3,7 +3,7 @@ each tool; the experiment counts the attempts each needs to get it right.
 The two variants are `variants/terraform.toml` and `variants/pulumi.toml`."""
 from __future__ import annotations
 
-from fae.cell.experiment import Gate
+from fae.experiment import Gate
 
 NAME = "iac"
 

@@ -9,7 +9,7 @@ from unittest import mock
 
 from _ctx import _ROOT as ROOT
 
-from fae.cell import experiment as _experiment
+from fae import experiment as _experiment
 
 from experiment import stack
 from experiment.verifier import Check, Failed, World

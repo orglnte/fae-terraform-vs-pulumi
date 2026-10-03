@@ -19,7 +19,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from fae.cell import experiment as _experiment
+from fae import experiment as _experiment
 from fae.cell.infra import secrunner
 from fae.cell.infra.base import HookFailure
 from fae.cell.verify import Verdict, Verifier
