@@ -252,7 +252,7 @@ class StackVerifier(Verifier):
     def verify(self, ctx):
         t0 = time.time()
         out = Path(ctx.out)
-        variant = _experiment.current().variant(ctx.variant)
+        variant = _experiment.definition().variant(ctx.variant)
         arrangement = ctx.arrangement or "prod"
         workdir = secrunner.fresh_copy(Path(ctx.artifacts), out) / "infra"
         logf = (out / "verify.log").open("w")

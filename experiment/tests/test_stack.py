@@ -15,7 +15,7 @@ from experiment import stack
 from experiment.verifier import Check, Failed, World
 
 EXP = ROOT / "experiment"
-Terraform, Pulumi = (_experiment.current().variant(v) for v in ("terraform", "pulumi"))
+Terraform, Pulumi = (_experiment.definition().variant(v) for v in ("terraform", "pulumi"))
 
 
 def arg(dockerfile, name):
@@ -24,7 +24,7 @@ def arg(dockerfile, name):
 
 class TestTheDefinition(unittest.TestCase):
     def test_two_variants_two_scenarios(self):
-        d = _experiment.current()
+        d = _experiment.definition()
         self.assertEqual(d.ids, ("pulumi", "terraform"))
         self.assertEqual(d.gate.arrangements, ("prod", "dev"))
 
