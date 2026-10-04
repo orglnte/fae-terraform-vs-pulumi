@@ -3,6 +3,7 @@ fae.toml
 # cells, their lock plane, and the two-stage delete's holding area
 workspaces.nosync/
 ws-test.nosync/
+ws-smoke.nosync/
 .to_be_deleted/
 tmp/
 __pycache__/
