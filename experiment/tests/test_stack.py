@@ -39,7 +39,7 @@ class TestTheDefinition(unittest.TestCase):
             self.assertEqual(v.AUTHORING_SURFACE, ((), ("infra/",)))
 
     def test_one_infra_class_and_a_runner_per_tool(self):
-        from fae.cell.variants import files
+        from fae.experiment.variants import files
         for v, runner in ((Terraform, stack.Terraform), (Pulumi, stack.Pulumi)):
             self.assertIs(v.INFRA, stack.Stack)
             self.assertIs(stack.RUNNERS[v.FACTORS["tool"]], runner)
