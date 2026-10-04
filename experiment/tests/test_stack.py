@@ -9,13 +9,13 @@ from unittest import mock
 
 from _ctx import _ROOT as ROOT
 
-from fae import shared as _shared
 
 from experiment import stack
 from experiment.verifier import Check, Failed, World
+import fae.experiment
 
 EXP = ROOT / "experiment"
-Terraform, Pulumi = (_shared.definition().variant(v) for v in ("terraform", "pulumi"))
+Terraform, Pulumi = (fae.experiment.exp().definition.variant(v) for v in ("terraform", "pulumi"))
 
 
 def arg(dockerfile, name):
@@ -24,7 +24,7 @@ def arg(dockerfile, name):
 
 class TestTheDefinition(unittest.TestCase):
     def test_two_variants_two_scenarios(self):
-        d = _shared.definition()
+        d = fae.experiment.exp().definition
         self.assertEqual(d.ids, ("pulumi", "terraform"))
         self.assertEqual(d.gate.arrangements, ("prod", "dev"))
 
