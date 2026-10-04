@@ -19,7 +19,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from fae import experiment as _experiment
+from fae import shared as _shared
 from fae.cell.infra import secrunner
 from fae.cell.infra.base import HookFailure
 from fae.cell.verify import Verdict, Verifier
@@ -252,7 +252,7 @@ class StackVerifier(Verifier):
     def verify(self, ctx):
         t0 = time.time()
         out = Path(ctx.out)
-        variant = _experiment.definition().variant(ctx.variant)
+        variant = _shared.definition().variant(ctx.variant)
         arrangement = ctx.arrangement or "prod"
         workdir = secrunner.fresh_copy(Path(ctx.artifacts), out) / "infra"
         logf = (out / "verify.log").open("w")
