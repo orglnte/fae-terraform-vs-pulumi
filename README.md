@@ -100,3 +100,9 @@ or compile its Python, not deploy), and the verifier deploys into a
 docker-in-docker daemon that belongs to the cell and is emptied before every
 scenario. An agent's image holds its own tool only: a Terraform agent has
 no Pulumi, and the other way round.
+
+## License and citation
+
+Apache-2.0: see [LICENSE](LICENSE). Redistributions carry [NOTICE](NOTICE).
+To cite this experiment, use [CITATION.cff](CITATION.cff) (GitHub's "Cite
+this repository").

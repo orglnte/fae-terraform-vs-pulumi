@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this experiment or results measured with it, please cite it as below."
+title: "fae-terraform-vs-pulumi: coding agents write the same Docker stack in Terraform and in Pulumi"
+type: software
+authors:
+  - name: "The fae-terraform-vs-pulumi authors"
+    website: "https://github.com/orglnte/fae-terraform-vs-pulumi"
+repository-code: "https://github.com/orglnte/fae-terraform-vs-pulumi"
+url: "https://github.com/orglnte/fae-terraform-vs-pulumi"
+license: Apache-2.0
+date-released: "2026-10-05"
+references:
+  - type: software
+    title: "fae: a Framework for Agentic-authoring Evaluations"
+    authors:
+      - name: "The fae authors"
+        website: "https://github.com/orglnte/fae"
+    url: "https://github.com/orglnte/fae"
