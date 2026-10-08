@@ -1,15 +1,20 @@
-# The agents this experiment compares. The tag names every cell id
-# (<tag>_<effort>_<variant>_<task>_r<n>). Each agent's credentials home is
-# machine-local: fae.toml [agents.<tag>] home, else .agent-home/.<cli>.
+# The agents and the models this experiment compares.
+# An agent is a CLI with one credential, shared by every model it runs
+# (`cli.py experiment credentials AGENT`; its home is machine-local, fae.toml
+# [agents.<name>] home, else the CLI's default). `cli` defaults to the name.
+# A model is what one agent runs; its tag names every cell id
+# (<tag>_<effort>_<variant>_<task>_r<n>).
 
-[agents.haiku]
-cli = "claude"
+[agents.claude]
+
+[models.haiku]
+agent = "claude"
 model = "claude-haiku-4-5-20251001"
 
-[agents.sonnet]
-cli = "claude"
+[models.sonnet]
+agent = "claude"
 model = "claude-sonnet-5"
 
-[agents.opus]
-cli = "claude"
+[models.opus]
+agent = "claude"
 model = "claude-opus-5"
